@@ -33,6 +33,15 @@ class _PlazaSceneState extends ConsumerState<PlazaScene> {
   void initState() {
     super.initState();
     AudioManager().playBgm('plaza');
+    _playFirework();
+  }
+
+  void _playFirework() {
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        AudioManager().playSfx('firework');
+      }
+    });
   }
 
   void _nextDialog() {
@@ -50,7 +59,6 @@ class _PlazaSceneState extends ConsumerState<PlazaScene> {
   }
 
   void _onUnderstandCorrect() {
-    AudioManager().playSfx('click');
     AudioManager().playSfx('success');
     setState(() {
       _ephemeralEmotion = NpcEmotion.calm;
@@ -74,7 +82,6 @@ class _PlazaSceneState extends ConsumerState<PlazaScene> {
   }
 
   void _onUnderstandWrong() {
-    AudioManager().playSfx('click');
     AudioManager().playSfx('failure');
     setState(() {
       _ephemeralEmotion = NpcEmotion.angry;
@@ -110,8 +117,6 @@ class _PlazaSceneState extends ConsumerState<PlazaScene> {
   }
 
   void _goToForge() {
-    AudioManager().playSfx('click');
-    AudioManager().playSfx('page_turn');
     AudioManager().stopBgm();
     ref.read(gameProvider.notifier).advanceTime();
     Navigator.push(

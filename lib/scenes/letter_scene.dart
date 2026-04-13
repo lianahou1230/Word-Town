@@ -46,7 +46,6 @@ class _LetterSceneState extends ConsumerState<LetterScene>
   @override
   void initState() {
     super.initState();
-    AudioManager().playBgm('letter');
     _envelopeController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -104,13 +103,12 @@ class _LetterSceneState extends ConsumerState<LetterScene>
   void _openLetter() {
     if (_envelopeState != EnvelopeState.closed) return;
     setState(() => _envelopeState = EnvelopeState.opening);
+    AudioManager().playBgm('letter');
     AudioManager().playSfx('letter_open');
     _envelopeController.forward();
   }
 
   void _goToPlaza() {
-    AudioManager().playSfx('click');
-    AudioManager().playSfx('page_turn');
     ref.read(gameProvider.notifier).advanceTime();
     Navigator.push(
       context,
@@ -119,7 +117,6 @@ class _LetterSceneState extends ConsumerState<LetterScene>
   }
 
   void _goToEnding() {
-    AudioManager().playSfx('click');
     ref.read(gameProvider.notifier).setEndingType(EndingType.miss);
     Navigator.push(
       context,

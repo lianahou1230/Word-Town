@@ -47,17 +47,36 @@ flutter build web
 word_town/
 ├── lib/                 # Dart 源代码
 │   ├── audio/          # 音频管理
-│   ├── data/           # 数据模型和词库
+│   ├── models/         # 数据模型
+│   ├── providers/      # 状态管理
 │   ├── scenes/         # 游戏场景
+│   │   ├── clinic_scene.dart
+│   │   ├── ending_scene.dart
+│   │   ├── forge_scene.dart
+│   │   ├── letter_scene.dart
+│   │   ├── plaza_scene.dart
+│   │   └── underground_scene.dart
+│   ├── theme/          # 主题配置
 │   ├── widgets/        # 自定义组件
+│   │   ├── effects/    # 特效组件
+│   │   └── ...         # UI 组件
 │   └── main.dart       # 入口文件
 ├── assets/             # 静态资源
 │   ├── audio/          # 音效和背景音乐
-│   ├── images/         # 游戏图片
-│   └── words/          # 单词数据
+│   │   ├── bgm_*.mp3   # 场景背景音乐
+│   │   └── *.mp3       # 音效文件
+│   ├── backgrounds/    # 场景背景图
+│   ├── characters/     # NPC 角色立绘
+│   ├── decorations/    # 装饰物品
+│   ├── endings/        # 结局画面
+│   ├── icons/          # 图标资源
+│   └── scenes/         # 场景特定资源
 ├── android/            # Android 平台配置
 ├── ios/                # iOS 平台配置
+├── linux/              # Linux 平台配置
+├── macos/              # macOS 平台配置
 ├── web/                # Web 平台配置
+├── windows/            # Windows 平台配置
 └── pubspec.yaml        # 项目依赖配置
 ```
 

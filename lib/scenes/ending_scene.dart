@@ -22,23 +22,42 @@ class _EndingSceneState extends ConsumerState<EndingScene> {
   @override
   void initState() {
     super.initState();
-    AudioManager().playBgm('ending');
+    _playEndingBgm();
     _playEndingSound();
+  }
+
+  void _playEndingBgm() {
+    final endingType = ref.read(gameProvider).endingType;
+    String bgmType;
+    switch (endingType) {
+      case EndingType.good:
+        bgmType = 'ending_good';
+        break;
+      case EndingType.medium:
+        bgmType = 'ending_medium';
+        break;
+      case EndingType.bad:
+        bgmType = 'ending_bad';
+        break;
+      case EndingType.miss:
+        bgmType = 'ending_miss';
+        break;
+      default:
+        bgmType = 'ending';
+    }
+    AudioManager().playBgm(bgmType);
   }
 
   void _playEndingSound() {
     final endingType = ref.read(gameProvider).endingType;
     switch (endingType) {
       case EndingType.good:
-        AudioManager().playSfx('crowd_cheer');
-        AudioManager().playSfx('success');
+        AudioManager().playSfx('firework');
         break;
       case EndingType.medium:
-        AudioManager().playSfx('page_turn');
         break;
       case EndingType.bad:
       case EndingType.miss:
-        AudioManager().playSfx('failure');
         break;
       default:
         break;
@@ -104,8 +123,6 @@ class _EndingSceneState extends ConsumerState<EndingScene> {
   }
 
   void _restartGame() {
-    AudioManager().playSfx('click');
-    AudioManager().playSfx('page_turn');
     ref.read(gameProvider.notifier).resetGame();
     Navigator.pushAndRemoveUntil(
       context,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
-import '../audio/audio_manager.dart';
 
 class ChoiceButton extends StatefulWidget {
   final String text;
@@ -22,7 +21,6 @@ class _ChoiceButtonState extends State<ChoiceButton> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => AudioManager().playSfx('hover'),
       child: GestureDetector(
         onTapDown: (_) => setState(() => _isPressed = true),
         onTapUp: (_) {

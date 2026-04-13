@@ -46,6 +46,12 @@ class _ForgeSceneState extends ConsumerState<ForgeScene> {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         AudioManager().playSfx('forge_hit');
+        // forge_hit 播放约 0.5 秒后播放 ember
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (mounted) {
+            AudioManager().playSfx('ember');
+          }
+        });
       }
     });
   }
@@ -65,7 +71,6 @@ class _ForgeSceneState extends ConsumerState<ForgeScene> {
   }
 
   void _onSubmit() {
-    AudioManager().playSfx('click');
     final input = _inputKey.currentState?.text ?? '';
     setState(() {
       _userInput = input;
@@ -97,27 +102,25 @@ class _ForgeSceneState extends ConsumerState<ForgeScene> {
     } else {
       AudioManager().playSfx('failure');
       setState(() {
+        _showInput = false;
         _showFailure = true;
         _tallowEmotion = NpcEmotion.angry;
         _isSpeaking = true;
       });
 
+      ref.read(gameProvider.notifier).setKindleSuccess(false);
+
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
           setState(() {
-            _showFailure = false;
-            _tallowEmotion = NpcEmotion.calm;
             _isSpeaking = false;
           });
-          _inputKey.currentState?.clear();
         }
       });
     }
   }
 
   void _goToUnderground() {
-    AudioManager().playSfx('click');
-    AudioManager().playSfx('page_turn');
     AudioManager().stopBgm();
     ref.read(gameProvider.notifier).advanceTime();
     Navigator.push(
@@ -137,12 +140,14 @@ class _ForgeSceneState extends ConsumerState<ForgeScene> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                if (_isTypingComplete && !_showInput && !_showNextChoice && _showResultDialog) {
+                if (_isTypingComplete && !_showInput && !_showNextChoice && (_showResultDialog || _showFailure)) {
                   setState(() {
                     _showNextChoice = true;
+                    _showFailure = false;
+                    _showResultDialog = false;
                     _isTypingComplete = false;
                   });
-                } else if (_isTypingComplete && !_showInput && !_showNextChoice && !_showResultDialog) {
+                } else if (_isTypingComplete && !_showInput && !_showNextChoice && !_showResultDialog && !_showFailure) {
                   _nextDialog();
                 }
               },
@@ -234,8 +239,15 @@ class _ForgeSceneState extends ConsumerState<ForgeScene> {
                                 if (_showFailure)
                                   DialogBubble(
                                     text:
-                                        '❌ "$_userInput" 中没有 kindle，Tallow 摇头。再试一次吧。',
+                                        '❌ "$_userInput" 中没有 kindle，Tallow 失望地摇头。他仍给了你灭火弹，但火药库地图不全。',
                                     type: MessageType.system,
+                                    onTypingComplete: () {
+                                      if (!_showNextChoice) {
+                                        setState(() {
+                                          _isTypingComplete = true;
+                                        });
+                                      }
+                                    },
                                   ),
                                 if (_showNextChoice) ...[
                                   DialogBubble(

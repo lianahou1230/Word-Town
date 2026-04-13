@@ -48,6 +48,8 @@ class _UndergroundSceneState extends ConsumerState<UndergroundScene>
   void initState() {
     super.initState();
     AudioManager().playBgm('underground');
+    AudioManager().playAmbient('water_drip');
+    _playWhisper();
     
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -64,6 +66,14 @@ class _UndergroundSceneState extends ConsumerState<UndergroundScene>
     _shakeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _shakeController, curve: Curves.easeInOut),
     );
+  }
+
+  void _playWhisper() {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        AudioManager().playSfx('whisper');
+      }
+    });
   }
 
   @override
@@ -86,7 +96,10 @@ class _UndergroundSceneState extends ConsumerState<UndergroundScene>
         _bombState = BombState.selecting;
       });
       Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) _fadeController.forward();
+        if (mounted) {
+          _fadeController.forward();
+          AudioManager().playAmbient('bomb_tick');
+        }
       });
     }
   }
@@ -106,6 +119,7 @@ class _UndergroundSceneState extends ConsumerState<UndergroundScene>
     if (_answer1 == null || _answer2 == null) return;
     
     AudioManager().playSfx('click');
+    AudioManager().stopAmbient();
     setState(() => _bombState = BombState.confirming);
 
     final isCorrect1 = _answer1!.toLowerCase() == 'ignite';
@@ -162,9 +176,8 @@ class _UndergroundSceneState extends ConsumerState<UndergroundScene>
   }
 
   void _goToClinic() {
-    AudioManager().playSfx('click');
-    AudioManager().playSfx('page_turn');
     AudioManager().stopBgm();
+    AudioManager().stopAmbient();
     ref.read(gameProvider.notifier).advanceTime();
     Navigator.push(
       context,

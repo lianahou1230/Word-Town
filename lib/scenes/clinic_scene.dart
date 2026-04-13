@@ -55,7 +55,6 @@ class _ClinicSceneState extends ConsumerState<ClinicScene> {
   }
 
   void _onSubmit() {
-    AudioManager().playSfx('click');
     final input = _inputKey.currentState?.text ?? '';
     setState(() {
       _userInput = input;
@@ -108,8 +107,6 @@ class _ClinicSceneState extends ConsumerState<ClinicScene> {
   }
 
   void _goToEnding() {
-    AudioManager().playSfx('click');
-    AudioManager().playSfx('page_turn');
     AudioManager().stopBgm();
     final endingType = ref.read(gameProvider.notifier).calculateEnding();
     ref.read(gameProvider.notifier).setEndingType(endingType);

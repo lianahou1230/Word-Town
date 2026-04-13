@@ -45,7 +45,7 @@ flutter build web
 
 ```
 word_town/
-├── lib/                 # Dart 源代码
+├── lib/                # Dart 源代码
 │   ├── audio/          # 音频管理
 │   ├── models/         # 数据模型
 │   ├── providers/      # 状态管理

@@ -50,12 +50,6 @@ word_town/
 │   ├── models/         # 数据模型
 │   ├── providers/      # 状态管理
 │   ├── scenes/         # 游戏场景
-│   │   ├── clinic_scene.dart
-│   │   ├── ending_scene.dart
-│   │   ├── forge_scene.dart
-│   │   ├── letter_scene.dart
-│   │   ├── plaza_scene.dart
-│   │   └── underground_scene.dart
 │   ├── theme/          # 主题配置
 │   ├── widgets/        # 自定义组件
 │   │   ├── effects/    # 特效组件

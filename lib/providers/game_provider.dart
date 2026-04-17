@@ -84,7 +84,7 @@ class GameNotifier extends StateNotifier<GameState> {
 
     if (state.bombDefused &&
         state.salvageVigilSuccess &&
-        successCount >= 2) {
+        successCount >= 3) {
       return EndingType.good;
     } else if (successCount >= 1) {
       return EndingType.medium;
